@@ -3,12 +3,18 @@ import { Navbar } from "./components/Navbar";
 import { CustomCursor } from "./components/CustomCursor";
 import { Home } from "./pages/Home";
 import { ProjectDetail } from "./pages/ProjectDetail";
+import { CozyNotes } from "./pages/CozyNotes";
+import { useLocation } from "react-router";
 
 function Root() {
+  const location = useLocation();
+  const isCozyNotes = location.pathname === "/project/cozy-notes";
+
   return (
     <div>
       <CustomCursor />
-      <Navbar />
+      {/* Hide shared navbar on CozyNotes — it has its own top bar */}
+      {!isCozyNotes && <Navbar />}
       <Outlet />
     </div>
   );
@@ -40,6 +46,8 @@ export const router = createBrowserRouter([
     Component: Root,
     children: [
       { index: true, Component: Home },
+      // Specific route BEFORE the dynamic :id catch-all
+      { path: "project/cozy-notes", Component: CozyNotes },
       { path: "project/:id", Component: ProjectDetail },
       { path: "*", Component: NotFound },
     ],
